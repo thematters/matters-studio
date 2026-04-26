@@ -55,8 +55,8 @@
       }
 
       /* Translucent white card holds title + summary + author byline.
-         Width 1008px keeps the card off the canvas vertical edges
-         (96px breathing room each side). */
+         Card sits within the 96px overlay padding, so it's well off
+         the canvas edges regardless of which background is picked. */
       .card {
         background: rgba(255, 255, 255, 0.92);
         border-radius: 24px;
@@ -129,8 +129,8 @@
 
       /* Brand lockup: two-circle mark + matters wordmark SVG, both
          sourced from design-system/templates/shared. Pinned to the
-         right edge of the byline row (matches DS spec "bottom-right"
-         while staying inside the legible card). */
+         right edge of the byline row — DS spec says "bottom-right",
+         and inside the card keeps it legible on dark backgrounds. */
       .brand {
         display: inline-flex;
         align-items: center;
