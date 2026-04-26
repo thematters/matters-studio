@@ -65,20 +65,41 @@ pnpm --filter @matters-studio/web build
 
 This bootstrap PR does **not** deploy. After merge:
 
-### Frontend → Cloudflare Pages
+### Frontend → Cloudflare Workers (Static Assets)
+
+> **Note**: Cloudflare merged Pages into Workers Builds in late 2024.
+> Static SPAs now deploy as Workers with `[assets]` config, not as the
+> classic Pages product. The same `studio.matters.town` URL works either
+> way; the dashboard UI just changed.
+
+#### Option A — Connect Git via dashboard (recommended)
+
+1. Cloudflare dashboard → **Workers & Pages → Create → Connect to Git**
+2. Pick `thematters/matters-studio`
+3. Fill the form:
+   | Field | Value |
+   |---|---|
+   | **Project name** | `matters-studio` |
+   | **Build command** | `pnpm install --frozen-lockfile && pnpm --filter @matters-studio/web build` |
+   | **Deploy command** | `cd apps/web && npx wrangler deploy` |
+   | **Non-production deploy command** | `cd apps/web && npx wrangler versions upload` |
+   | **Path** | `/` |
+   | **API token** | leave blank (auto-created) |
+   | **Variable name / value** | `VITE_API_BASE_URL` = `https://api.studio.matters.town` |
+4. Click **Create and deploy**
+5. After first deploy, add custom domain `studio.matters.town` in the project's Settings → Domains
+
+The Vite build picks up `VITE_API_BASE_URL` from the dashboard's
+build-env injection. The `[assets]` block in `apps/web/wrangler.toml`
+makes the Worker serve `dist/` with SPA fallback (any URL → `index.html`).
+
+#### Option B — From the CLI
 
 ```bash
 cd apps/web
 pnpm build
-wrangler pages deploy dist --project-name matters-studio
+VITE_API_BASE_URL=https://api.studio.matters.town npx wrangler deploy
 ```
-
-Or connect the repo in the Cloudflare dashboard: build command
-`pnpm --filter @matters-studio/web build`, output `apps/web/dist`.
-
-Set the production env var:
-
-- `VITE_API_BASE_URL=https://api.studio.matters.town`
 
 ### Worker → Cloudflare Workers
 
