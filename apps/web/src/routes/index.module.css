@@ -1,0 +1,90 @@
+.intro {
+  margin-bottom: 32px;
+}
+.heading {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0 0 8px;
+  color: var(--color-grey-black, #1a1a1a);
+}
+.lede {
+  font-size: 16px;
+  color: var(--color-grey-grey-darker, #666);
+  margin: 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.tile {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 24px;
+  border: 1px solid var(--color-grey-grey-light, #e5e5e5);
+  border-radius: 16px;
+  background: var(--color-grey-white, #fff);
+  text-decoration: none;
+  color: var(--color-grey-black, #1a1a1a);
+  transition:
+    border-color 120ms ease,
+    box-shadow 120ms ease,
+    transform 120ms ease;
+}
+.tile:hover {
+  text-decoration: none;
+  border-color: var(--color-brand-new-purple, #5e2cae);
+  box-shadow: 0 4px 16px rgba(94, 44, 174, 0.08);
+  transform: translateY(-1px);
+}
+
+.tileDisabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.tileDisabled:hover {
+  border-color: var(--color-grey-grey-light, #e5e5e5);
+  box-shadow: none;
+  transform: none;
+}
+
+.tileEmoji {
+  font-size: 32px;
+  line-height: 1;
+}
+
+.tileBody {
+  flex: 1;
+}
+
+.tileTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.tileTitle {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.badge {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--color-grey-grey-lighter, #f0f0f0);
+  color: var(--color-grey-grey-darker, #666);
+  font-weight: 500;
+}
+
+.tileDesc {
+  font-size: 14px;
+  color: var(--color-grey-grey-darker, #666);
+  margin: 0;
+  line-height: 1.5;
+}
