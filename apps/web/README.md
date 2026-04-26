@@ -17,7 +17,8 @@ pnpm typecheck    # tsc --noEmit
 
 ```
 VITE_API_BASE_URL=http://localhost:8787      # Worker URL
-VITE_RENDER_FALLBACK=0                       # 1 = future client-side render fallback
+VITE_RENDER_FALLBACK=1                       # 1 = rasterize the preview iframe in-browser via html-to-image
+                                             # 0 = call the Worker's /render-image (proxies to services/render)
 ```
 
 ## Routes (TanStack file-based)
