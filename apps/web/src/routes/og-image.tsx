@@ -8,7 +8,9 @@ import { Dialog } from "../components/Dialog";
 import { useToast } from "../components/Toast";
 
 import { ApiError, downloadBlob, renderImage, suggestTitle, type OgImageData } from "../lib/api";
+import { renderClientFallback } from "../lib/render-fallback";
 import { buildPreviewHtml, DEFAULT_OG_DATA } from "../lib/render-preview";
+import { RENDER_FALLBACK } from "../lib/env";
 
 import styles from "./og-image.module.css";
 
@@ -32,6 +34,9 @@ function OgImagePage() {
   const [suggestionOpen, setSuggestionOpen] = useState(false);
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const toast = useToast();
+  // Owned here (not in PreviewColumn) so the client-side fallback can read
+  // iframe.contentDocument when the user clicks "下載 PNG".
+  const previewIframeRef = useRef<HTMLIFrameElement | null>(null);
 
   // Debounce form before re-rendering the preview iframe.
   const debouncedForm = useDebounced(form, DEBOUNCE_MS);
@@ -40,7 +45,17 @@ function OgImagePage() {
   const update = (patch: Partial<OgImageData>) => setForm((prev) => ({ ...prev, ...patch }));
 
   const renderMutation = useMutation({
-    mutationFn: () => renderImage({ template: "og-image", data: form, scale: 2 }),
+    mutationFn: async () => {
+      // Client-side fallback: rasterize the live preview iframe via
+      // html-to-image. Used when the server-side renderer (Playwright on
+      // Fly/CF Browser Rendering) isn't deployed yet — see Phase 9.1 README.
+      if (RENDER_FALLBACK) {
+        const iframe = previewIframeRef.current;
+        if (!iframe) throw new ApiError("preview iframe not mounted", 0, null);
+        return renderClientFallback(iframe, { width: 1200, height: 630, pixelRatio: 2 });
+      }
+      return renderImage({ template: "og-image", data: form, scale: 2 });
+    },
     onSuccess: (blob) => {
       downloadBlob(blob, `matters-og-${Date.now()}.png`);
       toast.show({ text: "下載成功", variant: "positive" });
@@ -96,7 +111,7 @@ function OgImagePage() {
           isSuggesting={suggestMutation.isPending}
         />
 
-        <PreviewColumn srcDoc={previewSrcDoc} />
+        <PreviewColumn srcDoc={previewSrcDoc} iframeRef={previewIframeRef} />
       </div>
 
       <footer className={styles.actions}>
@@ -201,8 +216,12 @@ function FormColumn({ form, onChange, onSuggestTitle, isSuggesting }: FormColumn
   );
 }
 
-function PreviewColumn({ srcDoc }: { srcDoc: string }) {
-  const iframeRef = useRef<HTMLIFrameElement | null>(null);
+interface PreviewColumnProps {
+  srcDoc: string;
+  iframeRef: React.RefObject<HTMLIFrameElement | null>;
+}
+
+function PreviewColumn({ srcDoc, iframeRef }: PreviewColumnProps) {
   return (
     <div className={styles.previewCol}>
       <div className={styles.previewLabel}>預覽 (1200×630, 50%)</div>
