@@ -102,8 +102,9 @@
   color: var(--color-grey-grey-darker, #666);
 }
 .previewFrame {
+  /* Square preview matches the new 1200×1200 canvas at 50% zoom. */
   width: 600px;
-  height: 315px;
+  height: 600px;
   max-width: 100%;
   border: 1px solid var(--color-grey-grey-light, #e5e5e5);
   border-radius: 12px;
@@ -113,7 +114,7 @@
 }
 .previewIframe {
   width: 1200px;
-  height: 630px;
+  height: 1200px;
   border: 0;
   transform: scale(0.5);
   transform-origin: top left;
@@ -150,4 +151,72 @@
 .suggestionItem:hover {
   border-color: var(--color-brand-new-purple, #5e2cae);
   background: var(--color-grey-white, #fff);
+}
+
+/* Background picker — 6 swatches in a row, single-select like radio. */
+.bgPicker {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.bgPickerLabel {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-grey-grey-darker, #666);
+}
+.bgPickerRow {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
+}
+.bgSwatch {
+  position: relative;
+  aspect-ratio: 1;
+  background: transparent;
+  border: 2px solid var(--color-grey-grey-light, #e5e5e5);
+  border-radius: 8px;
+  padding: 0;
+  cursor: pointer;
+  overflow: hidden;
+  transition: border-color 120ms ease;
+}
+.bgSwatch:hover {
+  border-color: var(--color-grey-grey-darker, #666);
+}
+.bgSwatchActive {
+  border-color: var(--color-brand-new-purple, #7258ff);
+  border-width: 3px;
+}
+.bgSwatchInner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.95);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  background-size: cover;
+  background-position: center;
+}
+/* Inline-import the same JPGs the iframe uses; CSS module + Vite resolve
+   the relative paths to hashed asset URLs at build time. */
+.bgSwatchInner[data-bg="1"] {
+  background-image: url("../og-template/shared/backgrounds/1.jpg");
+}
+.bgSwatchInner[data-bg="2"] {
+  background-image: url("../og-template/shared/backgrounds/2.jpg");
+}
+.bgSwatchInner[data-bg="3"] {
+  background-image: url("../og-template/shared/backgrounds/3.jpg");
+}
+.bgSwatchInner[data-bg="4"] {
+  background-image: url("../og-template/shared/backgrounds/4.jpg");
+}
+.bgSwatchInner[data-bg="5"] {
+  background-image: url("../og-template/shared/backgrounds/5.jpg");
+}
+.bgSwatchInner[data-bg="6"] {
+  background-image: url("../og-template/shared/backgrounds/6.jpg");
 }

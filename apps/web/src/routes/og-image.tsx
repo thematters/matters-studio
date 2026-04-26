@@ -7,7 +7,14 @@ import { TextField } from "../components/TextField";
 import { Dialog } from "../components/Dialog";
 import { useToast } from "../components/Toast";
 
-import { ApiError, downloadBlob, renderImage, suggestTitle, type OgImageData } from "../lib/api";
+import {
+  ApiError,
+  downloadBlob,
+  OG_BACKGROUND_IDS,
+  renderImage,
+  suggestTitle,
+  type OgImageData,
+} from "../lib/api";
 import { renderClientFallback } from "../lib/render-fallback";
 import { buildPreviewHtml, DEFAULT_OG_DATA } from "../lib/render-preview";
 import { RENDER_FALLBACK } from "../lib/env";
@@ -52,7 +59,8 @@ function OgImagePage() {
       if (RENDER_FALLBACK) {
         const iframe = previewIframeRef.current;
         if (!iframe) throw new ApiError("preview iframe not mounted", 0, null);
-        return renderClientFallback(iframe, { width: 1200, height: 630, pixelRatio: 2 });
+        // Square canvas to match the designer's 1200×1200 backgrounds.
+        return renderClientFallback(iframe, { width: 1200, height: 1200, pixelRatio: 2 });
       }
       return renderImage({ template: "og-image", data: form, scale: 2 });
     },
@@ -71,8 +79,6 @@ function OgImagePage() {
       suggestTitle({
         currentTitle: form.title,
         summary: form.summary,
-        tag: form.tag,
-        topic: form.topic,
       }),
     onSuccess: (res) => {
       setSuggestions(res.suggestions);
@@ -99,7 +105,7 @@ function OgImagePage() {
             ← 回到 Studio
           </Link>
           <h1 className={styles.title}>OG 圖</h1>
-          <p className={styles.lede}>填表 → 即時預覽 → 下載 PNG。輸出尺寸 1200×630。</p>
+          <p className={styles.lede}>挑底圖 → 填表 → 即時預覽 → 下載 PNG。輸出尺寸 1200×1200。</p>
         </div>
       </header>
 
@@ -148,19 +154,34 @@ interface FormColumnProps {
 function FormColumn({ form, onChange, onSuggestTitle, isSuggesting }: FormColumnProps) {
   return (
     <div className={styles.formCol}>
-      <div className={styles.row}>
-        <TextField
-          label="標籤 (Tag)"
-          helperText="建議 ≤ 4 字。例如「創作」、「議題」。"
-          value={form.tag}
-          onChange={(e) => onChange({ tag: e.target.value })}
-        />
-        <TextField
-          label="主題 (Topic)"
-          helperText="可選。例如「深度長文」。"
-          value={form.topic}
-          onChange={(e) => onChange({ topic: e.target.value })}
-        />
+      <div className={styles.bgPicker}>
+        <span className={styles.bgPickerLabel}>底圖</span>
+        <div className={styles.bgPickerRow} role="radiogroup" aria-label="選擇底圖">
+          {OG_BACKGROUND_IDS.map((id) => {
+            const selected = form.background === id;
+            return (
+              <button
+                key={id}
+                type="button"
+                role="radio"
+                aria-checked={selected}
+                aria-label={`底圖 ${id}`}
+                className={`${styles.bgSwatch} ${selected ? styles.bgSwatchActive : ""}`}
+                onClick={() => onChange({ background: id })}
+              >
+                {/*
+                  Swatch art is loaded lazily by the browser; only the
+                  selected one needs to be eager (it drives the live preview
+                  iframe). 6 thumbnails @ 128px is cheap (~800KB total once
+                  cached) — acceptable for an internal tool.
+                */}
+                <span className={styles.bgSwatchInner} data-bg={id}>
+                  {id}
+                </span>
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       <div className={styles.titleField}>
@@ -192,19 +213,11 @@ function FormColumn({ form, onChange, onSuggestTitle, isSuggesting }: FormColumn
         onChange={(e) => onChange({ summary: e.target.value })}
       />
 
-      <div className={styles.row}>
-        <TextField
-          label="作者名稱"
-          value={form.authorName}
-          onChange={(e) => onChange({ authorName: e.target.value })}
-        />
-        <TextField
-          label="作者帳號"
-          helperText="不含 @。"
-          value={form.authorHandle}
-          onChange={(e) => onChange({ authorHandle: e.target.value })}
-        />
-      </div>
+      <TextField
+        label="作者名稱"
+        value={form.authorName}
+        onChange={(e) => onChange({ authorName: e.target.value })}
+      />
 
       <TextField
         label="作者頭像 URL"
@@ -224,7 +237,7 @@ interface PreviewColumnProps {
 function PreviewColumn({ srcDoc, iframeRef }: PreviewColumnProps) {
   return (
     <div className={styles.previewCol}>
-      <div className={styles.previewLabel}>預覽 (1200×630, 50%)</div>
+      <div className={styles.previewLabel}>預覽 (1200×1200, 50%)</div>
       <div className={styles.previewFrame}>
         <iframe
           ref={iframeRef}
