@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -p tsconfig.json && vite build",
+    "generate-routes": "tsr generate",
+    "build": "tsr generate && tsc -p tsconfig.json && vite build",
     "preview": "vite preview",
-    "typecheck": "tsc -p tsconfig.json --noEmit"
+    "typecheck": "tsr generate && tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.59.0",
@@ -17,6 +18,7 @@
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
+    "@tanstack/router-cli": "^1.81.0",
     "@tanstack/router-plugin": "^1.81.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
