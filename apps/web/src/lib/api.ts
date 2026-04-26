@@ -9,13 +9,23 @@
  */
 import { API_BASE_URL } from "./env";
 
+/**
+ * Background image identifier — keys into the 6 designer-provided
+ * illustrations vendored at `og-template/shared/backgrounds/<id>.jpg`.
+ *
+ * The wizard requires a background; there is no "blank" option (the
+ * canvas dimensions match the designer's compositions, so without a
+ * background the result would just be empty white).
+ */
+export type OgBackgroundId = "1" | "2" | "3" | "4" | "5" | "6";
+
+export const OG_BACKGROUND_IDS: readonly OgBackgroundId[] = ["1", "2", "3", "4", "5", "6"] as const;
+
 export interface OgImageData {
-  tag: string;
-  topic: string;
+  background: OgBackgroundId;
   title: string;
   summary: string;
   authorName: string;
-  authorHandle: string;
   authorAvatarUrl: string;
 }
 
@@ -59,8 +69,15 @@ export async function renderImage(req: RenderImageRequest): Promise<Blob> {
 export interface SuggestTitleRequest {
   currentTitle: string;
   summary: string;
-  tag: string;
-  topic: string;
+  /**
+   * Optional context fields. The form no longer collects tag/topic
+   * (Phase 9.1 simplified the OG layout to title + summary + author),
+   * but we keep these here as optional pass-throughs in case the API
+   * Worker's prompt benefits from them — and so older callers don't
+   * have to change shape.
+   */
+  tag?: string;
+  topic?: string;
 }
 
 export interface SuggestTitleResponse {

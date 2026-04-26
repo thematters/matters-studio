@@ -2,7 +2,9 @@
 <html lang="zh-Hant">
   <head>
     <meta charset="utf-8" />
-    <meta name="ds-template-size" content="1200x630" />
+    <!-- Phase 9.1 (designer-driven): square canvas matching the
+         provided 1200×1200 illustrated backgrounds. -->
+    <meta name="ds-template-size" content="1200x1200" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -12,53 +14,74 @@
     <link rel="stylesheet" href="../shared/tokens.css" />
     <link rel="stylesheet" href="../shared/template-base.css" />
     <style>
+      /* Square canvas (1200×1200). The illustrated background fills
+         the entire surface; content sits in a translucent white card
+         so it stays legible regardless of which of the 6 designer
+         backgrounds is picked (some are bright, some are dark). */
       .tpl-canvas {
+        position: relative;
         width: 1200px;
-        height: 630px;
-        padding: 64px 72px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        background: linear-gradient(180deg, #ffffff 0%, var(--color-primary-0) 100%);
+        height: 1200px;
+        padding: 0;
+        overflow: hidden;
+        /* Fallback color while the bg image loads. */
+        background: var(--color-primary-0);
       }
 
-      .tag-row {
+      .bg {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: 0;
+        /* The 6 designer JPGs are 1200×1201 — the 1px overflow gets
+           clipped invisibly by the canvas overflow:hidden above. */
+      }
+
+      /* Content overlay. Sits over the background, with generous
+         right-side breathing room (96px → Option A from PM feedback)
+         so the brand mark never feels pinned to the canvas edge. */
+      .overlay {
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        height: 100%;
+        padding: 80px 96px;
         display: flex;
-        gap: 12px;
-        align-items: center;
+        flex-direction: column;
+        justify-content: flex-end;
+        box-sizing: border-box;
       }
-      .tag {
-        display: inline-flex;
-        align-items: center;
-        padding: 6px 16px;
-        background: var(--color-brand-new-green);
-        color: var(--color-grey-black);
-        border-radius: 999px;
-        font-size: 18px;
-        font-weight: 500;
-      }
-      .topic {
-        color: var(--color-grey-grey-darker);
-        font-size: 18px;
+
+      /* Translucent white card holds title + summary + author byline.
+         Width 1008px keeps the card off the canvas vertical edges
+         (96px breathing room each side). */
+      .card {
+        background: rgba(255, 255, 255, 0.92);
+        border-radius: 24px;
+        padding: 56px 64px;
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
       }
 
       .title {
         font-family: "Noto Serif TC", serif;
-        font-size: 64px;
-        line-height: 1.25;
+        font-size: 60px;
+        line-height: 1.3;
         font-weight: 700;
         color: var(--color-grey-black);
         margin: 0;
-        /* clamp at 3 lines */
+        /* Clamp at 3 lines so the card height stays predictable. */
         display: -webkit-box;
         -webkit-line-clamp: 3;
         -webkit-box-orient: vertical;
         overflow: hidden;
-        max-width: 980px;
       }
 
       .summary {
-        font-size: 22px;
+        font-size: 24px;
         line-height: 1.6;
         color: var(--color-grey-grey-darker);
         margin: 24px 0 0;
@@ -66,10 +89,16 @@
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
-        max-width: 980px;
       }
 
-      .author-row {
+      /* Byline row: avatar + name on the left, brand lockup on the
+         right. Per PM: handle (@hi176), tag, and topic dropped from
+         the OG layout — they belong in the article page, not the
+         share card. */
+      .byline {
+        margin-top: 40px;
+        padding-top: 32px;
+        border-top: 1px solid rgba(0, 0, 0, 0.08);
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -79,6 +108,7 @@
         display: flex;
         align-items: center;
         gap: 16px;
+        min-width: 0;
       }
       .avatar {
         width: 56px;
@@ -86,26 +116,27 @@
         border-radius: 999px;
         object-fit: cover;
         background: var(--color-primary-100);
+        flex-shrink: 0;
       }
       .author-name {
-        font-size: 22px;
+        font-size: 24px;
         font-weight: 600;
         color: var(--color-grey-black);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
-      .author-handle {
-        font-size: 16px;
-        color: var(--color-grey-grey-darker);
-        margin-top: 2px;
-      }
-      /* Brand lockup: two-circle mark + matters wordmark SVG, both sourced
-         from design-system/templates/shared. Using the official lettering
-         SVG (instead of typing "Matters" in Noto Sans TC) ensures every
-         render matches the brand book — same letterforms, same proportion. */
+
+      /* Brand lockup: two-circle mark + matters wordmark SVG, both
+         sourced from design-system/templates/shared. Pinned to the
+         right edge of the byline row (matches DS spec "bottom-right"
+         while staying inside the legible card). */
       .brand {
         display: inline-flex;
         align-items: center;
         gap: 12px;
-        height: 28px;
+        height: 32px;
+        flex-shrink: 0;
       }
       .brand-mark,
       .brand-lettering {
@@ -117,29 +148,23 @@
   </head>
   <body>
     <div class="tpl-canvas">
-      <header class="tag-row">
-        <span class="tag">{{tag}}</span>
-        <span class="topic">{{topic}}</span>
-      </header>
-
-      <main>
-        <h1 class="title">{{title}}</h1>
-        <p class="summary">{{summary}}</p>
-      </main>
-
-      <footer class="author-row">
-        <div class="author">
-          <img class="avatar" src="{{authorAvatarUrl}}" alt="" />
-          <div>
-            <div class="author-name">{{authorName}}</div>
-            <div class="author-handle">@{{authorHandle}} · matters.town</div>
+      <img class="bg" src="{{backgroundUrl}}" alt="" />
+      <div class="overlay">
+        <div class="card">
+          <h1 class="title">{{title}}</h1>
+          <p class="summary">{{summary}}</p>
+          <div class="byline">
+            <div class="author">
+              <img class="avatar" src="{{authorAvatarUrl}}" alt="" />
+              <span class="author-name">{{authorName}}</span>
+            </div>
+            <div class="brand">
+              <img class="brand-mark" src="../shared/matters-mark-black-filled.svg" alt="" />
+              <img class="brand-lettering" src="../shared/matters-lettering-black.svg" alt="Matters" />
+            </div>
           </div>
         </div>
-        <div class="brand">
-          <img class="brand-mark" src="../shared/matters-mark-black-filled.svg" alt="" />
-          <img class="brand-lettering" src="../shared/matters-lettering-black.svg" alt="Matters" />
-        </div>
-      </footer>
+      </div>
     </div>
   </body>
 </html>
