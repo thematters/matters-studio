@@ -27,11 +27,15 @@
 
 .brandMark {
   display: inline-flex;
-  width: 28px;
   height: 28px;
+  /* Width auto: the two-circle mark has a 1.454:1 aspect ratio (≈ 41×28
+     at this height), so a fixed 28×28 wrapper would either crop the SVG
+     or center it with awkward whitespace on the sides. */
+  width: auto;
   align-items: center;
   justify-content: center;
-  color: var(--color-brand-new-purple, #5e2cae);
+  /* Canonical brand color per docs/architecture.md (Phase 3+). */
+  color: var(--color-brand-new-purple, #7258ff);
 }
 
 .brandText {

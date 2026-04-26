@@ -97,8 +97,21 @@
         color: var(--color-grey-grey-darker);
         margin-top: 2px;
       }
+      /* Brand lockup: two-circle mark + matters wordmark SVG, both sourced
+         from design-system/templates/shared. Using the official lettering
+         SVG (instead of typing "Matters" in Noto Sans TC) ensures every
+         render matches the brand book — same letterforms, same proportion. */
       .brand {
-        font-size: 20px;
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        height: 28px;
+      }
+      .brand-mark,
+      .brand-lettering {
+        display: block;
+        height: 100%;
+        width: auto;
       }
     </style>
   </head>
@@ -122,9 +135,9 @@
             <div class="author-handle">@{{authorHandle}} · matters.town</div>
           </div>
         </div>
-        <div class="tpl-brand-mark brand">
-          <img class="tpl-brand-mark__icon" src="../shared/matters-mark-color.svg" alt="" />
-          Matters
+        <div class="brand">
+          <img class="brand-mark" src="../shared/matters-mark-black-filled.svg" alt="" />
+          <img class="brand-lettering" src="../shared/matters-lettering-black.svg" alt="Matters" />
         </div>
       </footer>
     </div>

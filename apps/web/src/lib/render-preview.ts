@@ -8,19 +8,23 @@
  *   - og-template/template.html
  *   - og-template/shared/template-base.css
  *   - og-template/shared/tokens.css
- *   - og-template/shared/matters-mark-color.svg
+ *   - og-template/shared/matters-mark-black-filled.svg  (mark glyph)
+ *   - og-template/shared/matters-lettering-black.svg    (matters wordmark)
  *
- * The shared CSS files are bundled by Vite as raw strings (`?raw` suffix).
+ * The shared CSS files and SVGs are bundled by Vite as raw strings via
+ * the `?raw` import suffix.
  */
 import templateHtml from "../og-template/template.html?raw";
 import sharedTokensCss from "../og-template/shared/tokens.css?raw";
 import sharedBaseCss from "../og-template/shared/template-base.css?raw";
-import mattersMarkSvg from "../og-template/shared/matters-mark-color.svg?raw";
+import mattersMarkSvg from "../og-template/shared/matters-mark-black-filled.svg?raw";
+import mattersLetteringSvg from "../og-template/shared/matters-lettering-black.svg?raw";
 
 import type { OgImageData } from "./api";
 
-/** Inline-encode the brand mark SVG as a data URI so the iframe doesn't fetch it. */
+/** Inline-encode brand assets as data URIs so the iframe doesn't fetch them. */
 const MARK_DATA_URI = `data:image/svg+xml;utf8,${encodeURIComponent(mattersMarkSvg)}`;
+const LETTERING_DATA_URI = `data:image/svg+xml;utf8,${encodeURIComponent(mattersLetteringSvg)}`;
 
 /** Escape a string for safe insertion into HTML text (not attributes/URLs). */
 function escapeHtml(input: string): string {
@@ -52,7 +56,14 @@ export function buildPreviewHtml(data: OgImageData): string {
       /<link rel="stylesheet" href="..\/shared\/template-base.css" \/>/,
       `<style data-inline="base">${sharedBaseCss}</style>`
     )
-    .replace(/"\.\.\/shared\/matters-mark-color\.svg"/g, `"${escapeAttr(MARK_DATA_URI)}"`);
+    .replace(
+      /"\.\.\/shared\/matters-mark-black-filled\.svg"/g,
+      `"${escapeAttr(MARK_DATA_URI)}"`,
+    )
+    .replace(
+      /"\.\.\/shared\/matters-lettering-black\.svg"/g,
+      `"${escapeAttr(LETTERING_DATA_URI)}"`,
+    );
 
   // Step 2: substitute `{{key}}` placeholders.
   // Avatar URL goes into an `src=` attribute → escape as attribute.
@@ -69,14 +80,20 @@ export function buildPreviewHtml(data: OgImageData): string {
   return html;
 }
 
-/** Default seed values shown when the wizard first loads. */
+/**
+ * Default seed values shown when the wizard first loads.
+ *
+ * Author defaults to Matty (@hi176, the Matters founder) — using a real
+ * matters.town profile avatar means the preview looks like the real thing
+ * out of the box, instead of a stock unsplash placeholder.
+ */
 export const DEFAULT_OG_DATA: OgImageData = {
   tag: "創作",
   topic: "深度長文",
   title: "在馬特市寫字的第七年",
   summary: "從兩百個讀者到兩萬個。中間發生了什麼？",
-  authorName: "豆泥",
-  authorHandle: "mashbean",
+  authorName: "Matty",
+  authorHandle: "hi176",
   authorAvatarUrl:
-    "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&h=200&fit=crop",
+    "https://imagedelivery.net/kDRCweMmqLnTPNlbum-pYA/prod/avatar/19b36f6e-6311-4cd6-b703-c143a4a49113.png/public",
 };
