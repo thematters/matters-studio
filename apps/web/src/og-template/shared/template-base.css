@@ -1,0 +1,73 @@
+/* Shared base styles for all templates.
+ * Loaded after tokens.css. Provides:
+ *   - reset
+ *   - Noto fonts (load via Google Fonts in template.html <head>)
+ *   - typography utility classes specific to image rendering
+ *   - brand-mark utilities (use the official Matters.News icon + "Matters" wordmark)
+ */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Noto Sans TC", system-ui, sans-serif;
+  color: var(--color-grey-black);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.tpl-canvas {
+  /* Set explicit width/height on the canvas div via inline style;
+   * Playwright takes a screenshot at this exact size. */
+  position: relative;
+  overflow: hidden;
+  background: var(--color-grey-white);
+}
+
+.tpl-serif {
+  font-family: "Noto Serif TC", serif;
+}
+
+/* Brand mark — official Matters.News icon (two-circle glyph) + "Matters" wordmark.
+ *
+ * Uses the canonical SVG assets shipped under templates/shared/:
+ *   matters-mark-black.svg / matters-mark-white.svg / matters-mark-color.svg
+ *
+ * Two ready-made variants for templates:
+ *   .tpl-brand-mark            → black icon + dark text, for light backgrounds
+ *   .tpl-brand-mark--inverse   → white icon + white text, for dark backgrounds
+ *
+ * The icon size scales with the parent's font-size — set font-size on the
+ * wrapper to control the glyph height (1em ≈ wordmark cap height).
+ *
+ * To use the legacy color (gradient) icon instead, swap the inner <img src>
+ * to matters-mark-color.svg in the template HTML.
+ */
+.tpl-brand-mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  font-family: "Noto Sans TC", sans-serif;
+  font-weight: 600;
+  color: var(--color-grey-black);
+  line-height: 1;
+}
+
+.tpl-brand-mark__icon {
+  display: block;
+  /* Icon SVG aspect: 385.45 / 265 ≈ 1.454 */
+  height: 1em;
+  width: auto;
+  flex-shrink: 0;
+}
+
+.tpl-brand-mark--inverse {
+  color: var(--color-grey-white);
+}
