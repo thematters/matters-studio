@@ -1,0 +1,38 @@
+# Cloudflare Workers (Static Assets) config for the Studio frontend.
+#
+# Cloudflare merged Pages into Workers Builds in late 2024. A "static
+# site" is now a Worker with `[assets]` pointing at the build output.
+# `wrangler deploy` (or the dashboard's Deploy command) reads this file.
+#
+# When deploying via the CF dashboard's "Workers & Pages → Create →
+# Connect Git" flow, set:
+#   Build command:  pnpm install --frozen-lockfile && pnpm --filter @matters-studio/web build
+#   Deploy command: cd apps/web && npx wrangler deploy
+#   Path:           /
+
+name = "matters-studio"
+compatibility_date = "2025-01-01"
+
+# Serve the Vite build output as static assets.
+[assets]
+directory = "./dist"
+# SPA mode: any unmatched URL falls back to index.html so client-side
+# routing (TanStack Router) takes over.
+not_found_handling = "single-page-application"
+
+# NO [vars] block here — Vite reads `VITE_*` env vars at BUILD time, not
+# runtime. Runtime [vars] on a static-assets Worker would never reach
+# the bundled JS. To configure the API base URL for production:
+#
+#   1. CF dashboard → Workers & Pages → matters-studio → Settings →
+#      Variables and Secrets → "Add variable" with type "Plaintext"
+#      (or "Secret" if sensitive)
+#      Name:  VITE_API_BASE_URL
+#      Value: https://api.studio.matters.town
+#
+#   2. Save. Next deploy picks it up.
+#
+# For local dev (`pnpm dev`), put it in `apps/web/.env.local`:
+#   VITE_API_BASE_URL=http://localhost:8787  # local Worker
+#
+# .env.local is gitignored.
