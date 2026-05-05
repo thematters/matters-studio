@@ -14,6 +14,7 @@ import { cors } from "hono/cors";
 
 import type { Env } from "./env";
 import { parseAllowedOrigins } from "./env";
+import { generateBackgroundHandler } from "./ai-generate-background";
 import { renderImageHandler } from "./render-image";
 import { suggestTitleHandler } from "./ai-suggest";
 
@@ -36,6 +37,7 @@ app.get("/healthz", (c) => c.text("ok"));
 
 app.post("/render-image", renderImageHandler);
 app.post("/ai/suggest-title", suggestTitleHandler);
+app.post("/ai/generate-background", generateBackgroundHandler);
 
 app.notFound((c) => c.json({ error: "not_found" }, 404));
 

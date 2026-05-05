@@ -9,7 +9,7 @@ export const Route = createFileRoute("/")({
 interface Tile {
   title: string;
   description: string;
-  to?: "/og-image";
+  to?: "/og-image" | "/brand-catalog" | "/create-visual";
   badge?: string;
   enabled: boolean;
   emoji: string;
@@ -17,11 +17,25 @@ interface Tile {
 
 const TILES: Tile[] = [
   {
+    title: "快速製圖",
+    description: "選需求與分類，生成底圖並套用 Matters 版型下載 PNG。",
+    to: "/create-visual",
+    enabled: true,
+    emoji: "🎨",
+  },
+  {
     title: "OG 圖",
     description: "為文章/活動產生 1200×630 開放圖。即時預覽，下載 PNG。",
     to: "/og-image",
     enabled: true,
     emoji: "🖼️",
+  },
+  {
+    title: "品牌製圖分類",
+    description: "按 Matters.Town、Matters Lab、自由寫、七日書選需求與尺寸。",
+    to: "/brand-catalog",
+    enabled: true,
+    emoji: "🧭",
   },
   {
     title: "簡報",

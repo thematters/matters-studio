@@ -19,7 +19,7 @@ interface RenderRequestBody {
   scale?: number;
 }
 
-const ALLOWED_TEMPLATES = new Set(["og-image"]);
+const ALLOWED_TEMPLATES = new Set(["og-image", "ai-background-card"]);
 
 export async function renderImageHandler(c: Context<{ Bindings: Env }>) {
   let body: RenderRequestBody;

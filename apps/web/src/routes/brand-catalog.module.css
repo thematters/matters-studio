@@ -1,0 +1,216 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.pageHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.back {
+  display: inline-block;
+  font-size: 13px;
+  color: var(--color-grey-grey-darker, #666);
+  margin-bottom: 8px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.lede {
+  font-size: 14px;
+  color: var(--color-grey-grey-darker, #666);
+  margin: 0;
+  max-width: 760px;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(280px, 360px) minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 960px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.panel {
+  background: var(--color-grey-white, #fff);
+  border: 1px solid var(--color-grey-grey-light, #e5e5e5);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.panelTitle {
+  margin: 0 0 14px;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.useCaseList,
+.categoryList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.selector {
+  width: 100%;
+  text-align: left;
+  border: 1px solid var(--color-grey-grey-light, #e5e5e5);
+  border-radius: 8px;
+  background: var(--color-grey-white, #fff);
+  padding: 12px;
+  cursor: pointer;
+  color: var(--color-grey-black, #1a1a1a);
+}
+
+.selector:hover {
+  border-color: var(--color-brand-new-purple, #7258ff);
+}
+
+.selectorActive {
+  border-color: var(--color-brand-new-purple, #7258ff);
+  background: var(--color-primary-0, #f5f3ff);
+}
+
+.selectorTitle {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.selectorMeta {
+  display: block;
+  font-size: 12px;
+  color: var(--color-grey-grey-darker, #666);
+  line-height: 1.4;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.summaryGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+@media (max-width: 720px) {
+  .summaryGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.metric {
+  border: 1px solid var(--color-grey-grey-light, #e5e5e5);
+  border-radius: 8px;
+  padding: 14px;
+  background: var(--color-grey-white, #fff);
+}
+
+.metricLabel {
+  display: block;
+  font-size: 12px;
+  color: var(--color-grey-grey-darker, #666);
+  margin-bottom: 4px;
+}
+
+.metricValue {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.sectionTitle {
+  margin: 0 0 10px;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.tagList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 4px 10px;
+  background: var(--color-grey-grey-lighter, #f7f7f7);
+  color: var(--color-grey-black, #1a1a1a);
+  font-size: 12px;
+}
+
+.detailList {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--color-grey-grey-darker, #666);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.frameTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.frameTable th,
+.frameTable td {
+  border-bottom: 1px solid var(--color-grey-grey-light, #e5e5e5);
+  padding: 10px 8px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.frameTable th {
+  color: var(--color-grey-grey-darker, #666);
+  font-weight: 600;
+}
+
+.contractGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+@media (max-width: 720px) {
+  .contractGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.contractBox {
+  border: 1px solid var(--color-grey-grey-light, #e5e5e5);
+  border-radius: 8px;
+  padding: 14px;
+  background: var(--color-grey-white, #fff);
+}
+
+.contractTitle {
+  margin: 0 0 8px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.contractText {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--color-grey-grey-darker, #666);
+}
