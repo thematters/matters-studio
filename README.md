@@ -73,6 +73,11 @@ pnpm format:check
 pnpm --filter @matters-studio/web build
 ```
 
+## License
+
+Matters Studio is licensed under LGPL-3.0-or-later. See [`LICENSE`](LICENSE),
+[`COPYING.LESSER`](COPYING.LESSER), and [`COPYING`](COPYING).
+
 ## Brand Catalog
 
 The web app vendors a generated snapshot from

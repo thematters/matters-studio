@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "description": "Matters Studio — internal tooling app for the Matters team. Phase 9.1 MVP: OG Image wizard.",
-  "license": "Apache-2.0",
+  "license": "LGPL-3.0-or-later",
   "repository": {
     "type": "git",
     "url": "https://github.com/thematters/matters-studio.git"
