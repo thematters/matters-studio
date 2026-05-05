@@ -9,7 +9,7 @@ export const Route = createFileRoute("/")({
 interface Tile {
   title: string;
   description: string;
-  to?: "/og-image" | "/brand-catalog" | "/create-visual";
+  to?: "/og-image" | "/brand-catalog" | "/create-visual" | "/deck-builder" | "/landing-builder";
   badge?: string;
   code: string;
   enabled: boolean;
@@ -39,17 +39,19 @@ const TILES: Tile[] = [
   },
   {
     title: "簡報",
-    description: "Markdown → 馬特市風格 deck。匯出 PDF。",
+    description: "TWIGF 風格 Matters deck。即時預覽，下載 HTML。",
+    to: "/deck-builder",
     badge: "Phase 9.2",
     code: "04",
-    enabled: false,
+    enabled: true,
   },
   {
     title: "活動頁",
-    description: "為活動快速生成可分享的 landing page。",
+    description: "產生活動 landing page。可生 Hero 底圖並下載 HTML。",
+    to: "/landing-builder",
     badge: "Phase 9.3",
     code: "05",
-    enabled: false,
+    enabled: true,
   },
 ];
 

@@ -150,3 +150,7 @@ export function downloadBlob(blob: Blob, filename: string): void {
   // Defer revoke so Safari can finalize the download.
   setTimeout(() => URL.revokeObjectURL(url), 4000);
 }
+
+export function downloadTextFile(text: string, filename: string, type = "text/html"): void {
+  downloadBlob(new Blob([text], { type }), filename);
+}

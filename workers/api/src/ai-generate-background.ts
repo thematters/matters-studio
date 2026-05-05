@@ -12,6 +12,7 @@
  */
 import type { Context } from "hono";
 import type { Env } from "./env";
+import { parseAllowedOrigins } from "./env";
 
 interface GenerateBackgroundRequest {
   brief?: string;
@@ -33,8 +34,17 @@ const BASE_PROMPT = [
   "Use Matters purple #7258FF and lime #C3F432 as accents, with enough neutral or dark space for Traditional Chinese text overlay.",
   "Hard constraints: no readable text, no fake logos, no UI screenshots, no QR codes, no watermark.",
 ].join("\n");
+const MAX_BRIEF_LENGTH = 1800;
+const ALLOWED_SIZES = new Set(["1024x1024", "1536x1024", "1024x1536", "2048x2048"]);
+const ALLOWED_QUALITIES = new Set(["auto", "low", "medium", "high"]);
 
 export async function generateBackgroundHandler(c: Context<{ Bindings: Env }>) {
+  const originGuard = enforceAllowedOrigin(c);
+  if (originGuard) return originGuard;
+
+  const rateLimitGuard = await enforceImageRateLimit(c);
+  if (rateLimitGuard) return rateLimitGuard;
+
   let body: GenerateBackgroundRequest;
   try {
     body = (await c.req.json()) as GenerateBackgroundRequest;
@@ -45,6 +55,15 @@ export async function generateBackgroundHandler(c: Context<{ Bindings: Env }>) {
   const brief = body.brief?.trim();
   if (!brief) {
     return c.json({ error: "missing_brief" }, 400);
+  }
+  if (brief.length > MAX_BRIEF_LENGTH) {
+    return c.json(
+      {
+        error: "brief_too_long",
+        maxLength: MAX_BRIEF_LENGTH,
+      },
+      400
+    );
   }
 
   const apiKey = c.env.OPENAI_API_KEY?.trim();
@@ -60,8 +79,8 @@ export async function generateBackgroundHandler(c: Context<{ Bindings: Env }>) {
 
   const requestedModel = body.model?.trim() || c.env.OPENAI_IMAGE_MODEL?.trim() || "gpt-image-2";
   const fallbackModel = c.env.OPENAI_IMAGE_FALLBACK_MODEL?.trim() || "gpt-image-1";
-  const size = body.size || "1024x1024";
-  const quality = body.quality || "auto";
+  const size = ALLOWED_SIZES.has(body.size ?? "") ? body.size : "1024x1024";
+  const quality = ALLOWED_QUALITIES.has(body.quality ?? "") ? body.quality : "auto";
   const prompt = [
     BASE_PROMPT,
     "",
@@ -133,6 +152,86 @@ export async function generateBackgroundHandler(c: Context<{ Bindings: Env }>) {
       "X-OpenAI-Image-Requested-Model": requestedModel,
     },
   });
+}
+
+function enforceAllowedOrigin(c: Context<{ Bindings: Env }>): Response | null {
+  const origin = c.req.header("Origin")?.trim();
+  const allowedOrigins = parseAllowedOrigins(c.env);
+  if (!origin || !allowedOrigins.includes(origin)) {
+    return c.json(
+      {
+        error: "origin_not_allowed",
+        message: "Image generation is only available from the Studio web app.",
+      },
+      403
+    );
+  }
+  return null;
+}
+
+async function enforceImageRateLimit(c: Context<{ Bindings: Env }>): Promise<Response | null> {
+  const kv = c.env.MATTERS_STUDIO_RATE_LIMIT;
+  if (!kv) {
+    return c.json(
+      {
+        error: "rate_limit_not_configured",
+        message: "Image generation rate limiting is not configured.",
+      },
+      503
+    );
+  }
+
+  const limit = positiveInt(c.env.AI_IMAGE_RATE_LIMIT_PER_HOUR, 20);
+  const windowSeconds = positiveInt(c.env.AI_IMAGE_RATE_LIMIT_WINDOW_SECONDS, 3600);
+  const nowSeconds = Math.floor(Date.now() / 1000);
+  const windowStart = Math.floor(nowSeconds / windowSeconds) * windowSeconds;
+  const resetAt = windowStart + windowSeconds;
+  const key = await rateLimitKey(c, windowStart);
+  const current = Number.parseInt((await kv.get(key)) ?? "0", 10);
+
+  if (Number.isFinite(current) && current >= limit) {
+    const retryAfter = Math.max(1, resetAt - nowSeconds);
+    return c.json(
+      {
+        error: "rate_limited",
+        limit,
+        resetAt,
+        message: `Image generation is limited to ${limit} requests per hour.`,
+      },
+      429,
+      {
+        "Retry-After": String(retryAfter),
+        "X-RateLimit-Limit": String(limit),
+        "X-RateLimit-Remaining": "0",
+        "X-RateLimit-Reset": String(resetAt),
+      }
+    );
+  }
+
+  const next = Number.isFinite(current) ? current + 1 : 1;
+  await kv.put(key, String(next), { expirationTtl: windowSeconds + 120 });
+  return null;
+}
+
+async function rateLimitKey(c: Context<{ Bindings: Env }>, windowStart: number): Promise<string> {
+  const ip =
+    c.req.header("CF-Connecting-IP") ??
+    c.req.header("X-Forwarded-For")?.split(",")[0]?.trim() ??
+    "unknown-ip";
+  const userAgent = (c.req.header("User-Agent") ?? "unknown-agent").slice(0, 180);
+  const digest = await sha256Hex(`${ip}\n${userAgent}`);
+  return `ai-image:${windowStart}:${digest}`;
+}
+
+async function sha256Hex(input: string): Promise<string> {
+  const bytes = new TextEncoder().encode(input);
+  const hash = await crypto.subtle.digest("SHA-256", bytes);
+  return [...new Uint8Array(hash)].map((byte) => byte.toString(16).padStart(2, "0")).join("");
+}
+
+function positiveInt(input: string | undefined, fallback: number): number {
+  const value = Number.parseInt(input ?? "", 10);
+  return Number.isFinite(value) && value > 0 ? value : fallback;
 }
 
 async function callOpenAIImage({

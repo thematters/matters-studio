@@ -6,8 +6,14 @@ compatibility_flags = ["nodejs_compat"]
 # Public-facing variables. Secrets (ANTHROPIC_API_KEY) go in `wrangler secret put`.
 [vars]
 RENDER_SERVICE_URL = "" # set per-environment, e.g. https://render.matters.town
-ALLOWED_ORIGINS = "http://localhost:5173,https://studio.matters.town,https://matters-studio.mashbean-581.workers.dev"
+ALLOWED_ORIGINS = "http://localhost:5173,http://localhost:5174,https://design-studio.matters.town,https://studio.matters.town,https://matters-studio.mashbean-581.workers.dev"
 ANTHROPIC_MODEL = "claude-sonnet-4-5-20250929"
+AI_IMAGE_RATE_LIMIT_PER_HOUR = "20"
+AI_IMAGE_RATE_LIMIT_WINDOW_SECONDS = "3600"
+
+[[kv_namespaces]]
+binding = "MATTERS_STUDIO_RATE_LIMIT"
+id = "aee147dc48cf45158939c468605c9ef7"
 
 # Optional: production environment overrides
 # [env.production]
