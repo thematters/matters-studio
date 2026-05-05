@@ -1,39 +1,42 @@
 .page {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: var(--space-sp16);
 }
 
 .pageHeader {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--space-sp8);
 }
 
 .back {
   display: inline-block;
   font-size: 13px;
-  color: var(--color-grey-grey-darker, #666);
-  margin-bottom: 8px;
+  line-height: 20px;
+  color: var(--color-grey-grey-darker);
+  margin-bottom: var(--space-sp8);
 }
 
 .title {
   margin: 0;
   font-size: 24px;
+  line-height: 36px;
   font-weight: 700;
 }
 
 .lede {
   margin: 0;
   max-width: 760px;
-  color: var(--color-grey-grey-darker, #666);
+  color: var(--color-grey-grey-darker);
   font-size: 14px;
+  line-height: 22px;
 }
 
 .layout {
   display: grid;
   grid-template-columns: minmax(0, 480px) minmax(0, 1fr);
-  gap: 24px;
+  gap: var(--space-sp16);
   align-items: start;
 }
 
@@ -45,34 +48,35 @@
 
 .formCol,
 .panel {
-  background: var(--color-grey-white, #fff);
-  border: 1px solid var(--color-grey-grey-light, #e5e5e5);
+  background: var(--color-grey-white);
+  border: 1px solid var(--color-grey-grey-light);
   border-radius: 8px;
-  padding: 20px;
+  padding: var(--space-sp16);
 }
 
 .formCol {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--space-sp16);
 }
 
 .sectionTitle {
-  margin: 0 0 10px;
+  margin: 0 0 var(--space-sp10);
   font-size: 15px;
+  line-height: 22px;
   font-weight: 700;
 }
 
 .selectorGrid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
+  gap: var(--space-sp8);
 }
 
 .sizeGrid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
+  gap: var(--space-sp8);
 }
 
 @media (max-width: 560px) {
@@ -85,57 +89,63 @@
 .selector {
   width: 100%;
   text-align: left;
-  border: 1px solid var(--color-grey-grey-light, #e5e5e5);
+  border: 1px solid var(--color-grey-grey-light);
   border-radius: 8px;
-  background: #fff;
-  padding: 12px;
+  background: var(--color-grey-white);
+  padding: var(--space-sp12);
   cursor: pointer;
+  color: var(--color-grey-black);
 }
 
 .selector:hover {
-  border-color: var(--color-brand-new-purple, #7258ff);
+  border-color: var(--color-brand-new-purple);
+}
+.selector:focus-visible {
+  outline: 2px solid var(--color-brand-new-purple);
+  outline-offset: 2px;
 }
 
 .selectorActive {
-  border-color: var(--color-brand-new-purple, #7258ff);
-  background: var(--color-primary-0, #f5f3ff);
+  border-color: var(--color-brand-new-purple);
+  background: var(--color-primary-0);
 }
 
 .selectorTitle {
   display: block;
   font-size: 14px;
+  line-height: 22px;
   font-weight: 700;
 }
 
 .selectorMeta {
   display: block;
-  margin-top: 4px;
+  margin-top: var(--space-sp4);
   font-size: 12px;
-  color: var(--color-grey-grey-darker, #666);
-  line-height: 1.45;
+  color: var(--color-grey-grey-darker);
+  line-height: 18px;
 }
 
 .fieldStack {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--space-sp12);
 }
 
 .promptBox {
-  border: 1px solid var(--color-grey-grey-light, #e5e5e5);
+  border: 1px solid var(--color-grey-grey-light);
   border-radius: 8px;
-  padding: 12px;
-  background: var(--color-grey-grey-lighter, #f7f7f7);
+  padding: var(--space-sp12);
+  background: var(--color-grey-grey-lighter);
   font-size: 12px;
-  line-height: 1.6;
-  color: var(--color-grey-grey-darker, #666);
+  line-height: 18px;
+  color: var(--color-grey-grey-darker);
   max-height: 120px;
   overflow: auto;
 }
 
 .actions {
   display: flex;
-  gap: 10px;
+  gap: var(--space-sp10);
   flex-wrap: wrap;
   justify-content: flex-end;
 }
@@ -143,19 +153,20 @@
 .previewCol {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--space-sp12);
   min-width: 0;
 }
 
 .previewLabel {
   font-size: 13px;
-  color: var(--color-grey-grey-darker, #666);
+  line-height: 20px;
+  color: var(--color-grey-grey-darker);
 }
 
 .previewFrame {
-  border: 1px solid var(--color-grey-grey-light, #e5e5e5);
+  border: 1px solid var(--color-grey-grey-light);
   border-radius: 8px;
-  background: #fff;
+  background: var(--color-grey-white);
   overflow: hidden;
   position: relative;
 }
@@ -169,7 +180,7 @@
 .hintList {
   margin: 0;
   padding-left: 18px;
-  color: var(--color-grey-grey-darker, #666);
+  color: var(--color-grey-grey-darker);
   font-size: 13px;
-  line-height: 1.7;
+  line-height: 20px;
 }

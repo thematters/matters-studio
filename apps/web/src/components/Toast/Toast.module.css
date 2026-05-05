@@ -1,10 +1,6 @@
 /* Toast — Matters DS 1.5 (Feedback/Toast, node 2341:14260).
  *
- * Color mapping (matches Figma "Function/*" tokens):
- *   - Normal   → --color-grey-black
- *   - Positive → --color-function-positive (#5C9969)
- *   - Warn     → --color-function-warn     (#DBA34F)
- *   - Negative → --color-function-negative (#C85C41)
+ * Color mapping matches Figma "Function/*" tokens.
  */
 
 .viewport {
@@ -25,7 +21,7 @@
   pointer-events: auto;
   display: flex;
   align-items: center;
-  gap: var(--space-sp24);
+  gap: var(--space-sp16);
   padding: var(--space-sp12);
   border-radius: 8px;
   font-family: var(--font-family-ui);
@@ -91,7 +87,7 @@
 .action {
   background: none;
   border: 0;
-  color: rgba(255, 255, 255, 0.7);
+  color: color-mix(in srgb, var(--color-grey-white) 70%, transparent);
   font-family: inherit;
   font-size: 14px;
   line-height: 22px;
@@ -112,13 +108,13 @@
 .split {
   width: 1px;
   align-self: stretch;
-  background: rgba(255, 255, 255, 0.4);
+  background: color-mix(in srgb, var(--color-grey-white) 40%, transparent);
 }
 
 .close {
   background: none;
   border: 0;
-  color: rgba(255, 255, 255, 0.7);
+  color: color-mix(in srgb, var(--color-grey-white) 70%, transparent);
   cursor: pointer;
   padding: 0;
   width: 22px;

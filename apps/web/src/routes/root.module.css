@@ -8,18 +8,19 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 32px;
-  border-bottom: 1px solid var(--color-grey-grey-light, #e5e5e5);
-  background: var(--color-grey-white, #fff);
+  padding: var(--space-sp16) var(--space-sp32);
+  border-bottom: 1px solid var(--color-grey-grey-light);
+  background: var(--color-grey-white);
 }
 
 .brand {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
-  color: var(--color-grey-black, #1a1a1a);
+  gap: var(--space-sp12);
+  color: var(--color-grey-black);
   font-weight: 600;
   font-size: 18px;
+  line-height: 28px;
 }
 .brand:hover {
   text-decoration: none;
@@ -35,35 +36,42 @@
   align-items: center;
   justify-content: center;
   /* Canonical brand color per docs/architecture.md (Phase 3+). */
-  color: var(--color-brand-new-purple, #7258ff);
+  color: var(--color-brand-new-purple);
 }
 
 .brandText {
-  letter-spacing: 0.01em;
+  letter-spacing: 0;
 }
 
 .nav {
   display: flex;
-  gap: 16px;
+  gap: var(--space-sp16);
   align-items: center;
 }
 
 .navLink {
-  color: var(--color-grey-grey-darker, #666);
+  color: var(--color-grey-grey-darker);
   font-size: 14px;
+  line-height: 22px;
+}
+.navLink:focus-visible,
+.brand:focus-visible {
+  outline: 2px solid var(--color-brand-new-purple);
+  outline-offset: 2px;
+  border-radius: 4px;
 }
 
 .main {
   flex: 1;
-  padding: 32px;
+  padding: var(--space-sp32);
   max-width: 1280px;
   width: 100%;
   margin: 0 auto;
 }
 
 .footer {
-  padding: 24px 32px;
+  padding: var(--space-sp16) var(--space-sp32);
   text-align: center;
-  color: var(--color-grey-grey-darker, #666);
-  border-top: 1px solid var(--color-grey-grey-light, #e5e5e5);
+  color: var(--color-grey-grey-darker);
+  border-top: 1px solid var(--color-grey-grey-light);
 }

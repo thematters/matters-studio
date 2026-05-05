@@ -14,11 +14,11 @@ body,
 
 body {
   margin: 0;
-  font-family: var(--font-family-ui, "Noto Sans TC", system-ui, sans-serif);
+  font-family: var(--font-family-ui);
   font-size: 14px;
-  line-height: 1.5;
-  color: var(--color-grey-black, #1a1a1a);
-  background-color: var(--color-grey-grey-lighter, #fafafa);
+  line-height: 22px;
+  color: var(--color-grey-black);
+  background-color: var(--color-grey-grey-lighter);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -28,7 +28,7 @@ button {
 }
 
 a {
-  color: var(--color-brand-new-purple, #5e2cae);
+  color: var(--color-brand-new-purple);
   text-decoration: none;
 }
 a:hover {
