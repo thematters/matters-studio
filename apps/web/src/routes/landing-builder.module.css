@@ -123,6 +123,12 @@
   justify-content: flex-end;
 }
 
+.exportGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-sp8);
+}
+
 .previewLabel {
   color: var(--color-grey-grey-darker);
   font-size: 13px;
@@ -164,7 +170,8 @@
 
 @media (max-width: 640px) {
   .twoCol,
-  .selectorGrid {
+  .selectorGrid,
+  .exportGrid {
     grid-template-columns: 1fr;
   }
 }

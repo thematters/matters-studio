@@ -154,3 +154,12 @@ export function downloadBlob(blob: Blob, filename: string): void {
 export function downloadTextFile(text: string, filename: string, type = "text/html"): void {
   downloadBlob(new Blob([text], { type }), filename);
 }
+
+export function blobToDataUrl(blob: Blob): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result));
+    reader.onerror = () => reject(reader.error ?? new Error("Failed to read blob"));
+    reader.readAsDataURL(blob);
+  });
+}

@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation } from "@tanstack/react-query";
 
@@ -7,10 +7,12 @@ import { TextField } from "../components/TextField";
 import { useToast } from "../components/Toast";
 import {
   ApiError,
+  blobToDataUrl,
   downloadTextFile,
   generateBackground,
   type GenerateBackgroundRequest,
 } from "../lib/api";
+import { downloadDeckHandoff, downloadDeckPptx, openDeckPdf } from "../lib/export-deck";
 import { BACKGROUND_URLS } from "../lib/render-preview";
 import { buildDeckHtml, type DeckSlideData } from "../lib/render-deck-preview";
 
@@ -40,8 +42,8 @@ const DEFAULT_DECK: DeckSlideData = {
 
 function DeckBuilderPage() {
   const toast = useToast();
-  const generatedBackgroundUrlRef = useRef<string | null>(null);
   const [form, setForm] = useState<DeckSlideData>(DEFAULT_DECK);
+  const [exportMode, setExportMode] = useState<"pptx" | "google" | null>(null);
   const [prompt, setPrompt] = useState(
     "Text-free cover background for a Matters Lab policy workshop deck. Abstract public digital governance, civic conversation, transparent algorithmic systems, purple and lime accents, clean left text safe area, no readable text, no logo."
   );
@@ -57,10 +59,8 @@ function DeckBuilderPage() {
         size: "1536x1024" satisfies GenerateBackgroundRequest["size"],
         quality: "auto",
       }),
-    onSuccess: (blob) => {
-      const url = URL.createObjectURL(blob);
-      if (generatedBackgroundUrlRef.current) URL.revokeObjectURL(generatedBackgroundUrlRef.current);
-      generatedBackgroundUrlRef.current = url;
+    onSuccess: async (blob) => {
+      const url = await blobToDataUrl(blob);
       update({ backgroundUrl: url });
       toast.show({ text: "簡報封面底圖已生成", variant: "positive" });
     },
@@ -70,9 +70,44 @@ function DeckBuilderPage() {
     },
   });
 
-  const download = () => {
+  const downloadHtml = () => {
     downloadTextFile(html, "matters-deck.html");
     toast.show({ text: "HTML 簡報已下載", variant: "positive" });
+  };
+
+  const exportPptx = async () => {
+    setExportMode("pptx");
+    try {
+      await downloadDeckPptx(form);
+      toast.show({ text: "PPTX 已下載", variant: "positive" });
+    } catch {
+      toast.show({ text: "PPTX 匯出失敗，請改用 HTML 或 PDF", variant: "negative" });
+    } finally {
+      setExportMode(null);
+    }
+  };
+
+  const exportGoogleSlides = async () => {
+    const googleWindow = window.open(
+      "https://docs.google.com/presentation/u/0/create",
+      "_blank",
+      "noopener,noreferrer"
+    );
+    setExportMode("google");
+    try {
+      await downloadDeckPptx(form);
+      googleWindow?.focus();
+      toast.show({ text: "已下載 PPTX，並開啟 Google Slides 匯入入口", variant: "positive" });
+    } catch {
+      toast.show({ text: "Google Slides 交接失敗，請先下載 PPTX", variant: "negative" });
+    } finally {
+      setExportMode(null);
+    }
+  };
+
+  const downloadHandoff = () => {
+    downloadDeckHandoff(form, prompt, html);
+    toast.show({ text: "簡報 agent handoff 已下載", variant: "positive" });
   };
 
   return (
@@ -204,15 +239,36 @@ function DeckBuilderPage() {
             <iframe title="簡報預覽" srcDoc={html} className={styles.previewIframe} />
           </div>
           <section className={styles.panel}>
-            <h2 className={styles.sectionTitle}>設計建議</h2>
+            <h2 className={styles.sectionTitle}>設計與交付</h2>
             <ul className={styles.hintList}>
               <li>簡報比活動圖更適合嚴格黑白底、紫色章節碼與螢光綠重點線。</li>
               <li>封面可生圖，但內頁以資訊層級與留白為主，避免每頁都放背景圖。</li>
-              <li>下一步可加 Markdown 匯入、投影片排序、PDF 匯出與逐頁生圖。</li>
+              <li>Google Slides 目前採 PPTX 匯入；真正直接寫入需要 Google OAuth。</li>
             </ul>
           </section>
+          <section className={styles.panel}>
+            <h2 className={styles.sectionTitle}>匯出</h2>
+            <div className={styles.exportGrid}>
+              <Button variant="secondary" onClick={() => openDeckPdf(html)}>
+                匯出 PDF
+              </Button>
+              <Button variant="secondary" loading={exportMode === "pptx"} onClick={exportPptx}>
+                匯出 PPTX
+              </Button>
+              <Button
+                variant="secondary"
+                loading={exportMode === "google"}
+                onClick={exportGoogleSlides}
+              >
+                Google Slides
+              </Button>
+              <Button variant="secondary" onClick={downloadHandoff}>
+                Agent handoff
+              </Button>
+            </div>
+          </section>
           <div className={styles.actions}>
-            <Button variant="primary" size="large" onClick={download}>
+            <Button variant="primary" size="large" onClick={downloadHtml}>
               下載 HTML
             </Button>
           </div>

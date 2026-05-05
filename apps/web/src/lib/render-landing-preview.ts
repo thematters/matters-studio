@@ -7,11 +7,17 @@ export interface LandingData {
   cta: string;
   ctaUrl: string;
   sections: string;
+  agenda: string;
+  speakers: string;
+  formUrl: string;
+  deploySlug: string;
   backgroundUrl: string;
 }
 
 export function buildLandingHtml(data: LandingData): string {
   const sections = parseSections(data.sections);
+  const agenda = parseAgenda(data.agenda);
+  const speakers = parseSpeakers(data.speakers);
   const background = data.backgroundUrl
     ? ` style="--hero-bg: url('${escapeAttr(data.backgroundUrl)}')"`
     : "";
@@ -54,6 +60,9 @@ ${landingCss()}
   </section>`
     )
     .join("")}
+  ${agenda.length ? renderAgenda(agenda) : ""}
+  ${speakers.length ? renderSpeakers(speakers) : ""}
+  ${data.formUrl ? renderForm(data) : ""}
 </main>
 </body>
 </html>`;
@@ -190,11 +199,135 @@ h1 {
   font-size: 18px;
   line-height: 30px;
 }
+.module-section {
+  width: min(1120px, calc(100% - 64px));
+  margin: 0 auto;
+  padding: 72px 0;
+  border-bottom: 1px solid var(--m-rule);
+}
+.module-head {
+  display: grid;
+  grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
+  gap: 48px;
+  margin-bottom: 36px;
+}
+.module-head h2 {
+  margin: 0;
+  font-size: 36px;
+  line-height: 48px;
+  font-weight: 600;
+}
+.module-head p {
+  margin: 0;
+  color: var(--m-muted);
+  font-size: 18px;
+  line-height: 30px;
+}
+.agenda-list {
+  border-top: 2px solid var(--m-ink);
+}
+.agenda-item {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 32px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--m-rule);
+}
+.agenda-time {
+  color: var(--m-purple);
+  font-size: 15px;
+  line-height: 22px;
+  font-weight: 600;
+}
+.agenda-body h3 {
+  margin: 0 0 8px;
+  font-size: 24px;
+  line-height: 34px;
+  font-weight: 600;
+}
+.agenda-body p {
+  max-width: 760px;
+  margin: 0;
+  color: var(--m-muted);
+  font-size: 16px;
+  line-height: 26px;
+}
+.speaker-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+.speaker-card {
+  min-height: 180px;
+  padding: 22px;
+  border: 1px solid var(--m-rule);
+  border-radius: 8px;
+  background: var(--m-white);
+}
+.speaker-card h3 {
+  margin: 0 0 8px;
+  font-size: 24px;
+  line-height: 34px;
+  font-weight: 600;
+}
+.speaker-role {
+  margin: 0 0 18px;
+  color: var(--m-purple);
+  font-size: 14px;
+  line-height: 22px;
+  font-weight: 600;
+}
+.speaker-topic {
+  margin: 0;
+  color: var(--m-muted);
+  font-size: 16px;
+  line-height: 26px;
+}
+.form-wrap {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 32px;
+  align-items: start;
+}
+.form-copy h2 {
+  max-width: 520px;
+  margin: 0 0 18px;
+  font-size: 36px;
+  line-height: 48px;
+  font-weight: 600;
+}
+.form-copy p {
+  max-width: 520px;
+  margin: 0 0 24px;
+  color: var(--m-muted);
+  font-size: 18px;
+  line-height: 30px;
+}
+.form-frame {
+  width: 100%;
+  min-height: 620px;
+  border: 1px solid var(--m-rule);
+  border-radius: 8px;
+  background: var(--m-soft);
+}
+.form-fallback {
+  color: var(--m-purple);
+  text-decoration: none;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 600;
+}
 @media (max-width: 720px) {
   .topbar { padding: 12px 16px; }
   .hero { padding: 72px 20px 36px; }
   .hero::after { left: 20px; right: 20px; }
-  .content-section { width: calc(100% - 40px); padding: 48px 0; }
+  .content-section,
+  .module-section { width: calc(100% - 40px); padding: 48px 0; }
+  .module-head,
+  .agenda-item,
+  .form-wrap { grid-template-columns: 1fr; gap: 18px; }
+  .speaker-grid { grid-template-columns: 1fr; }
+  .form-frame { min-height: 560px; }
 }
 `;
 }
@@ -209,6 +342,86 @@ function parseSections(input: string): Array<{ kicker: string; title: string; bo
       const [title = item, body = ""] = item.split("|").map((part) => part.trim());
       return { kicker: String(index + 1).padStart(2, "0"), title, body };
     });
+}
+
+function parseAgenda(input: string): Array<{ time: string; title: string; body: string }> {
+  return input
+    .split("\n")
+    .map((item) => item.trim())
+    .filter(Boolean)
+    .slice(0, 8)
+    .map((item) => {
+      const [time = "", title = item, body = ""] = item.split("|").map((part) => part.trim());
+      return { time, title, body };
+    });
+}
+
+function parseSpeakers(input: string): Array<{ name: string; role: string; topic: string }> {
+  return input
+    .split("\n")
+    .map((item) => item.trim())
+    .filter(Boolean)
+    .slice(0, 9)
+    .map((item) => {
+      const [name = item, role = "", topic = ""] = item.split("|").map((part) => part.trim());
+      return { name, role, topic };
+    });
+}
+
+function renderAgenda(items: Array<{ time: string; title: string; body: string }>): string {
+  return `<section class="module-section">
+    <div class="module-head">
+      <h2>Agenda</h2>
+      <p>用清楚時段、討論主題與產出期待，讓參與者知道每一段的決策重點。</p>
+    </div>
+    <div class="agenda-list">
+      ${items
+        .map(
+          (item) => `<article class="agenda-item">
+        <p class="agenda-time">${escapeHtml(item.time)}</p>
+        <div class="agenda-body">
+          <h3>${escapeHtml(item.title)}</h3>
+          ${item.body ? `<p>${escapeHtml(item.body)}</p>` : ""}
+        </div>
+      </article>`
+        )
+        .join("")}
+    </div>
+  </section>`;
+}
+
+function renderSpeakers(items: Array<{ name: string; role: string; topic: string }>): string {
+  return `<section class="module-section">
+    <div class="module-head">
+      <h2>Speakers</h2>
+      <p>講者資訊保持精簡，讓主題、身分與活動關聯一眼可讀。</p>
+    </div>
+    <div class="speaker-grid">
+      ${items
+        .map(
+          (item) => `<article class="speaker-card">
+        <h3>${escapeHtml(item.name)}</h3>
+        ${item.role ? `<p class="speaker-role">${escapeHtml(item.role)}</p>` : ""}
+        ${item.topic ? `<p class="speaker-topic">${escapeHtml(item.topic)}</p>` : ""}
+      </article>`
+        )
+        .join("")}
+    </div>
+  </section>`;
+}
+
+function renderForm(data: LandingData): string {
+  return `<section class="module-section">
+    <div class="form-wrap">
+      <div class="form-copy">
+        <p class="section-kicker">Registration</p>
+        <h2>${escapeHtml(data.cta)}</h2>
+        <p>留下聯絡方式，我們會寄出活動提醒、會前資料與後續公開紀錄。</p>
+        <a class="form-fallback" href="${escapeAttr(data.formUrl)}">開啟報名表單</a>
+      </div>
+      <iframe class="form-frame" title="${escapeAttr(data.cta)}" src="${escapeAttr(data.formUrl)}" loading="lazy"></iframe>
+    </div>
+  </section>`;
 }
 
 function lineBreaks(input: string): string {

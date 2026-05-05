@@ -19,6 +19,11 @@ Backgrounds can come from the existing Studio assets or the Worker-backed
 OpenAI Images route; typography, logo, safe area, and final text composition stay
 deterministic in the browser template.
 
+**Phase 9.4 seed** expands the deck and activity workflows. Decks now keep
+cover art inside a right-side safe area and expose PDF, PPTX, Google Slides
+handoff, and agent-handoff exports. Activity pages now include agenda, speaker,
+form-embed, agent-handoff, and Cloudflare-ready deploy bundle exports.
+
 Production target: <https://studio.matters.town> (gated by Cloudflare Access).
 
 ## Stack
@@ -91,6 +96,10 @@ Route:
   background, preview the final layout, then download PNG.
 - `/brand-catalog` — browse use cases, activity families, common output sizes,
   typography signals, background rules, and representative Figma frames.
+- `/deck-builder` — generate a Matters-style presentation with deterministic
+  HTML preview plus PDF/PPTX/Google Slides handoff exports.
+- `/landing-builder` — generate an activity landing page with agenda, speaker,
+  form, agent handoff, and deploy bundle modules.
 
 Refresh flow:
 
@@ -173,6 +182,5 @@ how to refresh them when DS bumps versions.
 
 - Social card / newsletter wizards
 - Slides editor (Markdown → MD-style deck)
-- Activity / landing page builder
 - Draft saving via Cloudflare KV
 - Asset upload via R2
