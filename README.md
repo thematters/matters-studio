@@ -67,7 +67,8 @@ pnpm dev:api
 ```
 
 The frontend talks to the Worker at `VITE_API_BASE_URL`
-(defaults to `http://localhost:8787`).
+(local development defaults to `http://localhost:8787`; the production
+`design-studio.matters.town` host falls back to the deployed API Worker).
 
 ## Validation
 
@@ -137,7 +138,7 @@ This bootstrap PR does **not** deploy. After merge:
    | **Non-production deploy command** | `cd apps/web && npx wrangler versions upload` |
    | **Path** | `/` |
    | **API token** | leave blank (auto-created) |
-   | **Variable name / value** | `VITE_API_BASE_URL` = `https://api.studio.matters.town` |
+   | **Variable name / value** | `VITE_API_BASE_URL` = `https://matters-studio-api.mashbean-581.workers.dev` |
 4. Click **Create and deploy**
 5. After first deploy, add custom domain `studio.matters.town` in the project's Settings → Domains
 
@@ -150,7 +151,7 @@ makes the Worker serve `dist/` with SPA fallback (any URL → `index.html`).
 ```bash
 cd apps/web
 pnpm build
-VITE_API_BASE_URL=https://api.studio.matters.town npx wrangler deploy
+VITE_API_BASE_URL=https://matters-studio-api.mashbean-581.workers.dev npx wrangler deploy
 ```
 
 ### Worker → Cloudflare Workers
@@ -166,7 +167,7 @@ wrangler deploy
 ### Cloudflare Access
 
 In the Cloudflare dashboard, add an Access policy on
-`studio.matters.town` (and optionally `api.studio.matters.town`) that
+`studio.matters.town` that
 gates entry to the Matters Google Workspace identity provider. No code
 change required.
 
