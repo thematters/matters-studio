@@ -175,11 +175,11 @@ html, body { margin: 0; background: var(--m-black); color: var(--m-ink); font-fa
 }
 h1 {
   position: relative;
-  max-width: 690px;
+  max-width: 620px;
   margin: 0 0 28px;
   font-family: var(--font-serif);
-  font-size: 68px;
-  line-height: 1.15;
+  font-size: 56px;
+  line-height: 1.18;
   font-weight: 700;
 }
 h2 {
@@ -189,10 +189,10 @@ h2 {
   font-weight: 600;
 }
 .cover-sub {
-  max-width: 650px;
+  max-width: 590px;
   margin: 0;
   color: var(--m-muted);
-  font-size: 25px;
+  font-size: 24px;
   line-height: 1.45;
 }
 .cover-foot {
@@ -200,7 +200,7 @@ h2 {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 26px;
-  width: 650px;
+  width: 590px;
   margin-top: auto;
   padding-top: 24px;
   border-top: 1px solid var(--m-rule);

@@ -181,12 +181,12 @@ function addCoverSlide(
   });
   slide.addText(data.eventName.toUpperCase(), textOpts(0.84, 0.62, 6.1, 0.3, 11, PURPLE, true));
   slide.addText(data.title, {
-    ...textOpts(0.84, 1.24, 6.25, 2.2, 36, BLACK, true),
+    ...textOpts(0.84, 1.24, 5.95, 2.2, 30, BLACK, true),
     fontFace: "Noto Serif TC",
     breakLine: false,
     fit: "shrink",
   });
-  slide.addText(data.subtitle, textOpts(0.84, 3.7, 5.85, 0.72, 17, MUTED, false));
+  slide.addText(data.subtitle, textOpts(0.84, 3.7, 5.35, 0.72, 16, MUTED, false));
 
   const footerY = 6.15;
   addMeta(slide, "支持單位", data.supporter, 0.84, footerY);
