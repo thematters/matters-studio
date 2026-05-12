@@ -21,6 +21,11 @@ VITE_RENDER_FALLBACK=1                       # 1 = rasterize the preview iframe 
                                              # 0 = call the Worker's /render-image (proxies to services/render)
 ```
 
+Production deploys should set `VITE_API_BASE_URL` to
+`https://matters-studio-api.mashbean-581.workers.dev`. The
+`design-studio.matters.town` bundle has the same API Worker as a fallback so a
+missed build variable does not call the local development Worker.
+
 ## Routes (TanStack file-based)
 
 - `/` — Dashboard (3 tiles, only `/og-image` is enabled in Phase 9.1)

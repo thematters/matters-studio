@@ -1,12 +1,12 @@
 /* TextField — Matters DS 1.5 (Inputs/Text field, node 3307:19338).
  *
  * Figma palette remap (PM 2026-04-24 decision):
- *   - "Logo/Matters Green" #0D6763  →  --color-brand-new-purple
+ *   - "Logo/Matters Green" → --color-brand-new-purple
  *
  * Layout (vertical stack):
  *   [label row]   ← optional, 14px regular
  *   [field box]   ← border 1px, rounded 8px, padding 12, gap 16
- *   [helper row]  ← optional, 12px regular #b3b3b3
+ *   [helper row]  ← optional, 12px regular
  */
 
 .root {

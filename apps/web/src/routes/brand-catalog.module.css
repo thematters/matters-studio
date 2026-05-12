@@ -1,0 +1,231 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sp16);
+}
+
+.pageHeader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sp8);
+}
+
+.back {
+  display: inline-block;
+  font-size: 13px;
+  line-height: 20px;
+  color: var(--color-grey-grey-darker);
+  margin-bottom: var(--space-sp8);
+}
+
+.title {
+  font-size: 24px;
+  line-height: 36px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.lede {
+  font-size: 14px;
+  line-height: 22px;
+  color: var(--color-grey-grey-darker);
+  margin: 0;
+  max-width: 760px;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(280px, 360px) minmax(0, 1fr);
+  gap: var(--space-sp16);
+  align-items: start;
+}
+
+@media (max-width: 960px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.panel {
+  background: var(--color-grey-white);
+  border: 1px solid var(--color-grey-grey-light);
+  border-radius: 8px;
+  padding: var(--space-sp16);
+}
+
+.panelTitle {
+  margin: 0 0 var(--space-sp14);
+  font-size: 15px;
+  line-height: 22px;
+  font-weight: 700;
+}
+
+.useCaseList,
+.categoryList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sp8);
+}
+
+.selector {
+  width: 100%;
+  text-align: left;
+  border: 1px solid var(--color-grey-grey-light);
+  border-radius: 8px;
+  background: var(--color-grey-white);
+  padding: var(--space-sp12);
+  cursor: pointer;
+  color: var(--color-grey-black);
+}
+
+.selector:hover {
+  border-color: var(--color-brand-new-purple);
+}
+.selector:focus-visible {
+  outline: 2px solid var(--color-brand-new-purple);
+  outline-offset: 2px;
+}
+
+.selectorActive {
+  border-color: var(--color-brand-new-purple);
+  background: var(--color-primary-0);
+}
+
+.selectorTitle {
+  display: block;
+  font-size: 14px;
+  line-height: 22px;
+  font-weight: 700;
+  margin-bottom: var(--space-sp4);
+}
+
+.selectorMeta {
+  display: block;
+  font-size: 12px;
+  color: var(--color-grey-grey-darker);
+  line-height: 18px;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sp16);
+}
+
+.summaryGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-sp12);
+}
+
+@media (max-width: 720px) {
+  .summaryGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.metric {
+  border: 1px solid var(--color-grey-grey-light);
+  border-radius: 8px;
+  padding: var(--space-sp14);
+  background: var(--color-grey-white);
+}
+
+.metricLabel {
+  display: block;
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--color-grey-grey-darker);
+  margin-bottom: var(--space-sp4);
+}
+
+.metricValue {
+  font-size: 18px;
+  line-height: 28px;
+  font-weight: 700;
+}
+
+.sectionTitle {
+  margin: 0 0 var(--space-sp10);
+  font-size: 15px;
+  line-height: 22px;
+  font-weight: 700;
+}
+
+.tagList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sp8);
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: var(--space-sp4) var(--space-sp10);
+  background: var(--color-grey-grey-lighter);
+  color: var(--color-grey-black);
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.detailList {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--color-grey-grey-darker);
+  font-size: 14px;
+  line-height: 22px;
+}
+
+.frameTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  line-height: 20px;
+}
+
+.frameTable th,
+.frameTable td {
+  border-bottom: 1px solid var(--color-grey-grey-light);
+  padding: var(--space-sp10) var(--space-sp8);
+  text-align: left;
+  vertical-align: top;
+}
+
+.frameTable th {
+  color: var(--color-grey-grey-darker);
+  font-weight: 600;
+}
+
+.contractGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-sp12);
+}
+
+@media (max-width: 720px) {
+  .contractGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.contractBox {
+  border: 1px solid var(--color-grey-grey-light);
+  border-radius: 8px;
+  padding: var(--space-sp14);
+  background: var(--color-grey-white);
+}
+
+.contractTitle {
+  margin: 0 0 var(--space-sp8);
+  font-size: 14px;
+  line-height: 22px;
+  font-weight: 700;
+}
+
+.contractText {
+  margin: 0;
+  font-size: 13px;
+  line-height: 20px;
+  color: var(--color-grey-grey-darker);
+}

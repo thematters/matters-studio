@@ -29,12 +29,19 @@ export interface OgImageData {
   authorAvatarUrl: string;
 }
 
-export interface RenderImageRequest {
-  template: "og-image";
-  data: OgImageData;
-  /** Pixel scale, 1 or 2. Defaults server-side to 1. */
-  scale?: 1 | 2;
-}
+export type RenderImageRequest =
+  | {
+      template: "og-image";
+      data: OgImageData;
+      /** Pixel scale, 1 or 2. Defaults server-side to 1. */
+      scale?: 1 | 2;
+    }
+  | {
+      template: "ai-background-card";
+      data: Record<string, unknown>;
+      /** Pixel scale, 1 or 2. Defaults server-side to 1. */
+      scale?: 1 | 2;
+    };
 
 export class ApiError extends Error {
   status: number;
@@ -103,6 +110,34 @@ export async function suggestTitle(req: SuggestTitleRequest): Promise<SuggestTit
   return body as SuggestTitleResponse;
 }
 
+export interface GenerateBackgroundRequest {
+  brief: string;
+  categoryId?: string;
+  textSafeArea?: string;
+  size?: "1024x1024" | "1536x1024" | "1024x1536" | "2048x2048";
+  quality?: "auto" | "low" | "medium" | "high";
+  model?: string;
+}
+
+/** POST /ai/generate-background → image/png Blob. */
+export async function generateBackground(req: GenerateBackgroundRequest): Promise<Blob> {
+  const res = await fetch(`${API_BASE_URL}/ai/generate-background`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(req),
+  });
+  if (!res.ok) {
+    let body: unknown = null;
+    try {
+      body = await res.json();
+    } catch {
+      body = await res.text().catch(() => null);
+    }
+    throw new ApiError(`generateBackground failed (${res.status})`, res.status, body);
+  }
+  return await res.blob();
+}
+
 /** Trigger a browser download of a Blob. */
 export function downloadBlob(blob: Blob, filename: string): void {
   const url = URL.createObjectURL(blob);
@@ -114,4 +149,17 @@ export function downloadBlob(blob: Blob, filename: string): void {
   a.remove();
   // Defer revoke so Safari can finalize the download.
   setTimeout(() => URL.revokeObjectURL(url), 4000);
+}
+
+export function downloadTextFile(text: string, filename: string, type = "text/html"): void {
+  downloadBlob(new Blob([text], { type }), filename);
+}
+
+export function blobToDataUrl(blob: Blob): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result));
+    reader.onerror = () => reject(reader.error ?? new Error("Failed to read blob"));
+    reader.readAsDataURL(blob);
+  });
 }

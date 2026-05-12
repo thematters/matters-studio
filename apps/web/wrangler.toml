@@ -11,6 +11,7 @@
 #   Path:           /
 
 name = "matters-studio"
+account_id = "757aaed316df635d8deb63859258808c"
 compatibility_date = "2025-01-01"
 
 # Serve the Vite build output as static assets.
@@ -28,7 +29,7 @@ not_found_handling = "single-page-application"
 #      Variables and Secrets → "Add variable" with type "Plaintext"
 #      (or "Secret" if sensitive)
 #      Name:  VITE_API_BASE_URL
-#      Value: https://api.studio.matters.town
+#      Value: https://matters-studio-api.mashbean-581.workers.dev
 #
 #   2. Save. Next deploy picks it up.
 #
