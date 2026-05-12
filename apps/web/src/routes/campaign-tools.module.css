@@ -1,0 +1,241 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sp16);
+}
+
+.pageHeader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sp8);
+}
+
+.back {
+  display: inline-block;
+  font-size: 13px;
+  line-height: 20px;
+  color: var(--color-grey-grey-darker);
+  margin-bottom: var(--space-sp8);
+}
+
+.title {
+  font-size: 24px;
+  line-height: 36px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.lede {
+  font-size: 14px;
+  line-height: 22px;
+  color: var(--color-grey-grey-darker);
+  margin: 0;
+}
+
+.templateGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-sp12);
+}
+
+.templateButton {
+  min-height: 132px;
+  padding: var(--space-sp16);
+  text-align: left;
+  background: var(--color-grey-white);
+  border: 1px solid var(--color-grey-grey-light);
+  border-radius: 8px;
+  color: var(--color-grey-black);
+  cursor: pointer;
+}
+
+.templateButton:hover {
+  border-color: var(--color-brand-new-purple);
+}
+
+.templateButton:focus-visible {
+  outline: 2px solid var(--color-brand-new-purple);
+  outline-offset: 2px;
+}
+
+.templateButtonActive {
+  border-color: var(--color-brand-new-purple);
+  box-shadow: inset 0 0 0 1px var(--color-brand-new-purple);
+}
+
+.templateTitle,
+.templateDesc {
+  display: block;
+}
+
+.templateTitle {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 700;
+}
+
+.templateDesc {
+  margin-top: var(--space-sp8);
+  font-size: 13px;
+  line-height: 20px;
+  color: var(--color-grey-grey-darker);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(360px, 0.82fr) minmax(0, 1fr);
+  gap: var(--space-sp16);
+  align-items: start;
+}
+
+.formCol {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sp16);
+  padding: var(--space-sp16);
+  background: var(--color-grey-white);
+  border: 1px solid var(--color-grey-grey-light);
+  border-radius: 8px;
+}
+
+.sourceBox {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sp4);
+  padding: var(--space-sp12);
+  background: var(--color-grey-grey-lighter);
+  border-radius: 8px;
+}
+
+.sourceBox span {
+  font-size: 14px;
+  line-height: 22px;
+  font-weight: 700;
+}
+
+.sourceBox small {
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--color-grey-grey-darker);
+}
+
+.inlineFields {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--space-sp12);
+  align-items: end;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-sp12);
+}
+
+.checkboxRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sp8);
+  font-size: 14px;
+  line-height: 22px;
+  color: var(--color-grey-black);
+}
+
+.checkboxRow input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--color-brand-new-purple);
+}
+
+.segmented {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-sp8);
+}
+
+.segment {
+  min-height: 44px;
+  background: var(--color-grey-white);
+  border: 1px solid var(--color-grey-grey-light);
+  border-radius: 8px;
+  color: var(--color-grey-black);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.segment:hover {
+  border-color: var(--color-brand-new-purple);
+}
+
+.segment:focus-visible {
+  outline: 2px solid var(--color-brand-new-purple);
+  outline-offset: 2px;
+}
+
+.segmentActive {
+  color: var(--color-brand-new-purple);
+  border-color: var(--color-brand-new-purple);
+  background: var(--color-primary-0);
+}
+
+.previewCol {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sp8);
+  min-width: 0;
+}
+
+.previewLabel {
+  font-size: 13px;
+  line-height: 20px;
+  color: var(--color-grey-grey-darker);
+}
+
+.previewFrame {
+  max-width: 100%;
+  border: 1px solid var(--color-grey-grey-light);
+  border-radius: 8px;
+  background: var(--color-grey-white);
+  overflow: hidden;
+  position: relative;
+  box-shadow: var(--shadow-shadow1);
+}
+
+.previewIframe {
+  border: 0;
+  transform-origin: top left;
+  display: block;
+}
+
+.actions {
+  display: flex;
+  gap: var(--space-sp12);
+  justify-content: flex-end;
+  padding-top: var(--space-sp8);
+}
+
+@media (max-width: 1100px) {
+  .templateGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 680px) {
+  .templateGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .inlineFields,
+  .statsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .actions {
+    justify-content: stretch;
+  }
+}

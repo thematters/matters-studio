@@ -9,7 +9,13 @@ export const Route = createFileRoute("/")({
 interface Tile {
   title: string;
   description: string;
-  to?: "/og-image" | "/brand-catalog" | "/create-visual" | "/deck-builder" | "/landing-builder";
+  to?:
+    | "/og-image"
+    | "/brand-catalog"
+    | "/create-visual"
+    | "/campaign-tools"
+    | "/deck-builder"
+    | "/landing-builder";
   badge?: string;
   code: string;
   enabled: boolean;
@@ -38,11 +44,19 @@ const TILES: Tile[] = [
     enabled: true,
   },
   {
+    title: "活動模板",
+    description: "承接舊 Vercel 活動小站：年度成就、致謝卡、身份卡、拉票海報。",
+    to: "/campaign-tools",
+    badge: "Vercel sunset",
+    code: "04",
+    enabled: true,
+  },
+  {
     title: "簡報",
     description: "TWIGF 風格 Matters deck。支援 PDF、PPTX 與 Google Slides 交接。",
     to: "/deck-builder",
     badge: "Phase 9.4",
-    code: "04",
+    code: "05",
     enabled: true,
   },
   {
@@ -50,7 +64,7 @@ const TILES: Tile[] = [
     description: "產生活動 landing page，含 agenda、speakers、表單與部署包。",
     to: "/landing-builder",
     badge: "Phase 9.4",
-    code: "05",
+    code: "06",
     enabled: true,
   },
 ];

@@ -97,6 +97,10 @@ Route:
   background, preview the final layout, then download PNG.
 - `/brand-catalog` — browse use cases, activity families, common output sizes,
   typography signals, background rules, and representative Figma frames.
+- `/campaign-tools` — maintained Studio versions of legacy Vercel campaign
+  card/poster generators: 2022 年度創作成就卡, 2023 致謝詞小卡, Matters Identity
+  Card, and Nomad Matters 拉票海報. See
+  [`docs/vercel-campaign-sunset.md`](docs/vercel-campaign-sunset.md).
 - `/deck-builder` — generate a Matters-style presentation with deterministic
   HTML preview plus PDF/PPTX/Google Slides handoff exports.
 - `/landing-builder` — generate an activity landing page with agenda, speaker,
